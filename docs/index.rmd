@@ -19,12 +19,74 @@ library(tidyverse)
 ```{r scatterplot}
 #mpg
 
-g <- ggplot(data = mpg, aes(x = displ, y = hwy))
-g + geom_point()
+g <- ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_point()
 
 ```
 
 ## I need color
 
 ```{r color}
-g + geom_point(aes(color = class))
+g <- ggplot(data = mpg, aes(x = displ, y = hwy, color = class)) +
+  geom_point()
+g
+```
+
+## Change color to shape, for a b&w plot
+
+``` {r shape}
+g <- ggplot(data = mpg, aes(x = displ, y = hwy, shape = class)) +
+  geom_point()
+g
+```
+
+## now let's play with the size
+
+``` {r size}
+g <- ggplot(data = mpg, aes(x = cty, y = hwy, size = class, color = fl)) +
+  geom_point(alpha = 0.4)
+g
+```
+
+```{r fix color}
+g <- ggplot(data = mpg, aes(x = cty, y = hwy, size = class)) +
+  geom_point(alpha = 0.4, color = "blue")
+g
+```
+
+## Exercise 5.5
+
+1. What’s gone wrong with this code?
+
+```{r fix the code}
+ ggplot(data = mpg) + 
+      geom_point(aes(x = displ, y = hwy, color = "blue"))
+                 ### The color should be outside of the asesthetic
+ ggplot(data = mpg) + 
+      geom_point(aes(x = displ, y = hwy), color = "blue")
+```
+
+2. Plot hwy vs displ and have the point color to indicate cty mpg.
+
+```{r number 2}
+ggplot(data = mpg, aes(x = displ, y = hwy), color = cty) + 
+  geom_point()
+```
+
+Note: finish these exercises later
+
+```{r multiple_geoms}
+
+ggplot(data = mpg) + 
+  geom_point(aes(x = displ, y = hwy)) + 
+  geom_smooth(aes(x = displ, y = hwy))
+
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth() + 
+  labs(title = "Replationship b/w engine size & MPG",
+       x = "Highway MPG",
+       y = "Engine Displacement (liters)") + 
+  theme_classic() + 
+  theme(text = element_text(size = 16))
+````
