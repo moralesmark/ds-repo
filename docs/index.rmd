@@ -101,9 +101,49 @@ gapminder <- readr::read_csv("https://raw.githubusercontent.com/OHI-Science/data
 head(gapminder) ### shows first six rows of the data
 tail(gapminder) ### shows last six rows of the data
 
+### check the structure of your data
 str(gapminder)
 
+### collumn names
+names(gapminder)
+
+### dimension of the data
+dim(gapminder)
+ncol(gapminder)
+nrow(gapminder)
+
+### combine with c()
+c(nrow(gapminder), ncol(gapminder))
+
+### summary statistics
+summary(gapminder)
+
+### for everything above, we were operating on the whole gapminder dataset
 
 ```
 
+### Actually working with dplyr
+
+filter
+```{r filter}
+filter(gapminder, lifeExp < 29)
+
+filter(gapminder, country == "Mexico")
+
+mean(filter(gapminder, country == "Sweden")$lifeExp)
+mean(select(filter(gapminder, country == "Sweden"), lifeExp))
+
+```
+
+
+piper operator
+```{r operator}
+gapminder %>% head(3)
+
+gapminder %>%
+  filter(country == "Sweden") %>%
+  summarize(mean_lifeExp = mean(lifeExp))
+
+
+```
 

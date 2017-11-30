@@ -347,7 +347,8 @@ head(gapminder) ### shows first six rows of the data</code></pre>
 ## 4 Zimbabwe  1997 11404948    Africa  46.809  792.4500
 ## 5 Zimbabwe  2002 11926563    Africa  39.989  672.0386
 ## 6 Zimbabwe  2007 12311143    Africa  43.487  469.7093</code></pre>
-<pre class="r"><code>str(gapminder)</code></pre>
+<pre class="r"><code>### check the structure of your data
+str(gapminder)</code></pre>
 <pre><code>## Classes 'tbl_df', 'tbl' and 'data.frame':    1704 obs. of  6 variables:
 ##  $ country  : chr  &quot;Afghanistan&quot; &quot;Afghanistan&quot; &quot;Afghanistan&quot; &quot;Afghanistan&quot; ...
 ##  $ year     : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
@@ -372,6 +373,83 @@ head(gapminder) ### shows first six rows of the data</code></pre>
 ##   ..$ default: list()
 ##   .. ..- attr(*, &quot;class&quot;)= chr  &quot;collector_guess&quot; &quot;collector&quot;
 ##   ..- attr(*, &quot;class&quot;)= chr &quot;col_spec&quot;</code></pre>
+<pre class="r"><code>### collumn names
+names(gapminder)</code></pre>
+<pre><code>## [1] &quot;country&quot;   &quot;year&quot;      &quot;pop&quot;       &quot;continent&quot; &quot;lifeExp&quot;   &quot;gdpPercap&quot;</code></pre>
+<pre class="r"><code>### dimension of the data
+dim(gapminder)</code></pre>
+<pre><code>## [1] 1704    6</code></pre>
+<pre class="r"><code>ncol(gapminder)</code></pre>
+<pre><code>## [1] 6</code></pre>
+<pre class="r"><code>nrow(gapminder)</code></pre>
+<pre><code>## [1] 1704</code></pre>
+<pre class="r"><code>### combine with c()
+c(nrow(gapminder), ncol(gapminder))</code></pre>
+<pre><code>## [1] 1704    6</code></pre>
+<pre class="r"><code>### summary statistics
+summary(gapminder)</code></pre>
+<pre><code>##    country               year           pop             continent        
+##  Length:1704        Min.   :1952   Min.   :6.001e+04   Length:1704       
+##  Class :character   1st Qu.:1966   1st Qu.:2.794e+06   Class :character  
+##  Mode  :character   Median :1980   Median :7.024e+06   Mode  :character  
+##                     Mean   :1980   Mean   :2.960e+07                     
+##                     3rd Qu.:1993   3rd Qu.:1.959e+07                     
+##                     Max.   :2007   Max.   :1.319e+09                     
+##     lifeExp        gdpPercap       
+##  Min.   :23.60   Min.   :   241.2  
+##  1st Qu.:48.20   1st Qu.:  1202.1  
+##  Median :60.71   Median :  3531.8  
+##  Mean   :59.47   Mean   :  7215.3  
+##  3rd Qu.:70.85   3rd Qu.:  9325.5  
+##  Max.   :82.60   Max.   :113523.1</code></pre>
+<pre class="r"><code>### for everything above, we were operating on the whole gapminder dataset</code></pre>
+<div id="actually-working-with-dplyr" class="section level3">
+<h3>Actually working with dplyr</h3>
+<p>filter</p>
+<pre class="r"><code>filter(gapminder, lifeExp &lt; 29)</code></pre>
+<pre><code>## # A tibble: 2 x 6
+##       country  year     pop continent lifeExp gdpPercap
+##         &lt;chr&gt; &lt;int&gt;   &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Afghanistan  1952 8425333      Asia  28.801  779.4453
+## 2      Rwanda  1992 7290203    Africa  23.599  737.0686</code></pre>
+<pre class="r"><code>filter(gapminder, country == &quot;Mexico&quot;)</code></pre>
+<pre><code>## # A tibble: 12 x 6
+##    country  year       pop continent lifeExp gdpPercap
+##      &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+##  1  Mexico  1952  30144317  Americas  50.789  3478.126
+##  2  Mexico  1957  35015548  Americas  55.190  4131.547
+##  3  Mexico  1962  41121485  Americas  58.299  4581.609
+##  4  Mexico  1967  47995559  Americas  60.110  5754.734
+##  5  Mexico  1972  55984294  Americas  62.361  6809.407
+##  6  Mexico  1977  63759976  Americas  65.032  7674.929
+##  7  Mexico  1982  71640904  Americas  67.405  9611.148
+##  8  Mexico  1987  80122492  Americas  69.498  8688.156
+##  9  Mexico  1992  88111030  Americas  71.455  9472.384
+## 10  Mexico  1997  95895146  Americas  73.670  9767.298
+## 11  Mexico  2002 102479927  Americas  74.902 10742.441
+## 12  Mexico  2007 108700891  Americas  76.195 11977.575</code></pre>
+<pre class="r"><code>mean(filter(gapminder, country == &quot;Sweden&quot;)$lifeExp)</code></pre>
+<pre><code>## [1] 76.177</code></pre>
+<pre class="r"><code>mean(select(filter(gapminder, country == &quot;Sweden&quot;), lifeExp))</code></pre>
+<pre><code>## Warning in mean.default(select(filter(gapminder, country == &quot;Sweden&quot;),
+## lifeExp)): argument is not numeric or logical: returning NA</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>piper operator</p>
+<pre class="r"><code>gapminder %&gt;% head(3)</code></pre>
+<pre><code>## # A tibble: 3 x 6
+##       country  year      pop continent lifeExp gdpPercap
+##         &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+## 1 Afghanistan  1952  8425333      Asia  28.801  779.4453
+## 2 Afghanistan  1957  9240934      Asia  30.332  820.8530
+## 3 Afghanistan  1962 10267083      Asia  31.997  853.1007</code></pre>
+<pre class="r"><code>gapminder %&gt;%
+  filter(country == &quot;Sweden&quot;) %&gt;%
+  summarize(mean_lifeExp = mean(lifeExp))</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   mean_lifeExp
+##          &lt;dbl&gt;
+## 1       76.177</code></pre>
+</div>
 </div>
 
 
