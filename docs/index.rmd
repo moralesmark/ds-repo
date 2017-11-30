@@ -89,4 +89,21 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
        y = "Engine Displacement (liters)") + 
   theme_classic() + 
   theme(text = element_text(size = 16))
-````
+```
+
+## Data Wrangling with 'dplyr'
+
+```{r}
+
+gapminder <- readr::read_csv("https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv")
+
+### some useful functions to get to know your data
+head(gapminder) ### shows first six rows of the data
+tail(gapminder) ### shows last six rows of the data
+
+str(gapminder)
+
+
+```
+
+
