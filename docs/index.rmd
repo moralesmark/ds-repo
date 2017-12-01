@@ -131,7 +131,6 @@ filter(gapminder, lifeExp < 29)
 filter(gapminder, country == "Mexico")
 
 mean(filter(gapminder, country == "Sweden")$lifeExp)
-mean(select(filter(gapminder, country == "Sweden"), lifeExp))
 
 ```
 
@@ -147,3 +146,62 @@ gapminder %>%
 
 ```
 
+select() by collumns
+```{r select}
+### select 2 columns
+select(gapminder, year, lifeExp)
+
+### with the pipe operator
+gapminder %>%
+  select(year, lifeExp) %>%
+  tail()
+
+### combine what we have learned 
+gapminder %>%
+  filter(country == "Cambodia") %>%
+  select(country, year, pop, gdpPercap)
+
+### same as above
+gapminder %>%
+  filter(country == "Cambodia") %>%
+  select(-continent, -lifeExp)
+
+### alternatively using base R.
+gapminder[,c(1:3, 5)]
+
+```
+
+mutate() to add columns
+```{r mutate}
+gapminder %>%
+  mutate(gdp = pop * gdpPercap)
+
+### let's add an index
+gapminder %>%
+  mutate(index = 1:nrow(gapminder)) %>%
+  tail()
+
+### combine these new columns
+gapminder %>%
+  mutate(gdp = pop * gdpPercap ,index = 1:nrow(gapminder)) %>%
+  tail()
+  
+gapminder %>%
+  filter(country == c("Egypt", "Vietnam"))
+
+### Find the maximum gdpPercap of Egypt and Vietnam Create a new column.
+gapminder %>%
+  filter(country == "Egypt" %in% "Vietnam") %>%
+  mutate(max_gdpPercap = max(gdpPercap))
+
+### group_by so that we can 2 maxes
+gapminder %>%
+  filter(country %in% c("Egypt", "Vietnam")) %>%
+  group_by(country) %>%
+  summarize(max_gdpPercap = max(gdpPercap))
+
+gapminder %>%
+  group_by(country) %>%
+  summarize(max_gdpPercap = max(gdpPercap))
+  
+```

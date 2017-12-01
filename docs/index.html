@@ -430,10 +430,6 @@ summary(gapminder)</code></pre>
 ## 12  Mexico  2007 108700891  Americas  76.195 11977.575</code></pre>
 <pre class="r"><code>mean(filter(gapminder, country == &quot;Sweden&quot;)$lifeExp)</code></pre>
 <pre><code>## [1] 76.177</code></pre>
-<pre class="r"><code>mean(select(filter(gapminder, country == &quot;Sweden&quot;), lifeExp))</code></pre>
-<pre><code>## Warning in mean.default(select(filter(gapminder, country == &quot;Sweden&quot;),
-## lifeExp)): argument is not numeric or logical: returning NA</code></pre>
-<pre><code>## [1] NA</code></pre>
 <p>piper operator</p>
 <pre class="r"><code>gapminder %&gt;% head(3)</code></pre>
 <pre><code>## # A tibble: 3 x 6
@@ -449,6 +445,184 @@ summary(gapminder)</code></pre>
 ##   mean_lifeExp
 ##          &lt;dbl&gt;
 ## 1       76.177</code></pre>
+<p>select() by collumns</p>
+<pre class="r"><code>### select 2 columns
+select(gapminder, year, lifeExp)</code></pre>
+<pre><code>## # A tibble: 1,704 x 2
+##     year lifeExp
+##    &lt;int&gt;   &lt;dbl&gt;
+##  1  1952  28.801
+##  2  1957  30.332
+##  3  1962  31.997
+##  4  1967  34.020
+##  5  1972  36.088
+##  6  1977  38.438
+##  7  1982  39.854
+##  8  1987  40.822
+##  9  1992  41.674
+## 10  1997  41.763
+## # ... with 1,694 more rows</code></pre>
+<pre class="r"><code>### with the pipe operator
+gapminder %&gt;%
+  select(year, lifeExp) %&gt;%
+  tail()</code></pre>
+<pre><code>## # A tibble: 6 x 2
+##    year lifeExp
+##   &lt;int&gt;   &lt;dbl&gt;
+## 1  1982  60.363
+## 2  1987  62.351
+## 3  1992  60.377
+## 4  1997  46.809
+## 5  2002  39.989
+## 6  2007  43.487</code></pre>
+<pre class="r"><code>### combine what we have learned 
+gapminder %&gt;%
+  filter(country == &quot;Cambodia&quot;) %&gt;%
+  select(country, year, pop, gdpPercap)</code></pre>
+<pre><code>## # A tibble: 12 x 4
+##     country  year      pop gdpPercap
+##       &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Cambodia  1952  4693836  368.4693
+##  2 Cambodia  1957  5322536  434.0383
+##  3 Cambodia  1962  6083619  496.9136
+##  4 Cambodia  1967  6960067  523.4323
+##  5 Cambodia  1972  7450606  421.6240
+##  6 Cambodia  1977  6978607  524.9722
+##  7 Cambodia  1982  7272485  624.4755
+##  8 Cambodia  1987  8371791  683.8956
+##  9 Cambodia  1992 10150094  682.3032
+## 10 Cambodia  1997 11782962  734.2852
+## 11 Cambodia  2002 12926707  896.2260
+## 12 Cambodia  2007 14131858 1713.7787</code></pre>
+<pre class="r"><code>### same as above
+gapminder %&gt;%
+  filter(country == &quot;Cambodia&quot;) %&gt;%
+  select(-continent, -lifeExp)</code></pre>
+<pre><code>## # A tibble: 12 x 4
+##     country  year      pop gdpPercap
+##       &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1 Cambodia  1952  4693836  368.4693
+##  2 Cambodia  1957  5322536  434.0383
+##  3 Cambodia  1962  6083619  496.9136
+##  4 Cambodia  1967  6960067  523.4323
+##  5 Cambodia  1972  7450606  421.6240
+##  6 Cambodia  1977  6978607  524.9722
+##  7 Cambodia  1982  7272485  624.4755
+##  8 Cambodia  1987  8371791  683.8956
+##  9 Cambodia  1992 10150094  682.3032
+## 10 Cambodia  1997 11782962  734.2852
+## 11 Cambodia  2002 12926707  896.2260
+## 12 Cambodia  2007 14131858 1713.7787</code></pre>
+<pre class="r"><code>### alternatively using base R.
+gapminder[,c(1:3, 5)]</code></pre>
+<pre><code>## # A tibble: 1,704 x 4
+##        country  year      pop lifeExp
+##          &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;   &lt;dbl&gt;
+##  1 Afghanistan  1952  8425333  28.801
+##  2 Afghanistan  1957  9240934  30.332
+##  3 Afghanistan  1962 10267083  31.997
+##  4 Afghanistan  1967 11537966  34.020
+##  5 Afghanistan  1972 13079460  36.088
+##  6 Afghanistan  1977 14880372  38.438
+##  7 Afghanistan  1982 12881816  39.854
+##  8 Afghanistan  1987 13867957  40.822
+##  9 Afghanistan  1992 16317921  41.674
+## 10 Afghanistan  1997 22227415  41.763
+## # ... with 1,694 more rows</code></pre>
+<p>mutate() to add columns</p>
+<pre class="r"><code>gapminder %&gt;%
+  mutate(gdp = pop * gdpPercap)</code></pre>
+<pre><code>## # A tibble: 1,704 x 7
+##        country  year      pop continent lifeExp gdpPercap         gdp
+##          &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+##  1 Afghanistan  1952  8425333      Asia  28.801  779.4453  6567086330
+##  2 Afghanistan  1957  9240934      Asia  30.332  820.8530  7585448670
+##  3 Afghanistan  1962 10267083      Asia  31.997  853.1007  8758855797
+##  4 Afghanistan  1967 11537966      Asia  34.020  836.1971  9648014150
+##  5 Afghanistan  1972 13079460      Asia  36.088  739.9811  9678553274
+##  6 Afghanistan  1977 14880372      Asia  38.438  786.1134 11697659231
+##  7 Afghanistan  1982 12881816      Asia  39.854  978.0114 12598563401
+##  8 Afghanistan  1987 13867957      Asia  40.822  852.3959 11820990309
+##  9 Afghanistan  1992 16317921      Asia  41.674  649.3414 10595901589
+## 10 Afghanistan  1997 22227415      Asia  41.763  635.3414 14121995875
+## # ... with 1,694 more rows</code></pre>
+<pre class="r"><code>### let's add an index
+gapminder %&gt;%
+  mutate(index = 1:nrow(gapminder)) %&gt;%
+  tail()</code></pre>
+<pre><code>## # A tibble: 6 x 7
+##    country  year      pop continent lifeExp gdpPercap index
+##      &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt; &lt;int&gt;
+## 1 Zimbabwe  1982  7636524    Africa  60.363  788.8550  1699
+## 2 Zimbabwe  1987  9216418    Africa  62.351  706.1573  1700
+## 3 Zimbabwe  1992 10704340    Africa  60.377  693.4208  1701
+## 4 Zimbabwe  1997 11404948    Africa  46.809  792.4500  1702
+## 5 Zimbabwe  2002 11926563    Africa  39.989  672.0386  1703
+## 6 Zimbabwe  2007 12311143    Africa  43.487  469.7093  1704</code></pre>
+<pre class="r"><code>### combine these new columns
+gapminder %&gt;%
+  mutate(gdp = pop * gdpPercap ,index = 1:nrow(gapminder)) %&gt;%
+  tail()</code></pre>
+<pre><code>## # A tibble: 6 x 8
+##    country  year      pop continent lifeExp gdpPercap        gdp index
+##      &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;int&gt;
+## 1 Zimbabwe  1982  7636524    Africa  60.363  788.8550 6024110454  1699
+## 2 Zimbabwe  1987  9216418    Africa  62.351  706.1573 6508240905  1700
+## 3 Zimbabwe  1992 10704340    Africa  60.377  693.4208 7422611852  1701
+## 4 Zimbabwe  1997 11404948    Africa  46.809  792.4500 9037850590  1702
+## 5 Zimbabwe  2002 11926563    Africa  39.989  672.0386 8015110972  1703
+## 6 Zimbabwe  2007 12311143    Africa  43.487  469.7093 5782658337  1704</code></pre>
+<pre class="r"><code>gapminder %&gt;%
+  filter(country == c(&quot;Egypt&quot;, &quot;Vietnam&quot;))</code></pre>
+<pre><code>## # A tibble: 12 x 6
+##    country  year      pop continent lifeExp gdpPercap
+##      &lt;chr&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;chr&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+##  1   Egypt  1952 22223309    Africa  41.893 1418.8224
+##  2   Egypt  1962 28173309    Africa  46.992 1693.3359
+##  3   Egypt  1972 34807417    Africa  51.137 2024.0081
+##  4   Egypt  1982 45681811    Africa  56.006 3503.7296
+##  5   Egypt  1992 59402198    Africa  63.674 3794.7552
+##  6   Egypt  2002 73312559    Africa  69.806 4754.6044
+##  7 Vietnam  1957 28998543      Asia  42.887  676.2854
+##  8 Vietnam  1967 39463910      Asia  47.838  637.1233
+##  9 Vietnam  1977 50533506      Asia  55.764  713.5371
+## 10 Vietnam  1987 62826491      Asia  62.820  820.7994
+## 11 Vietnam  1997 76048996      Asia  70.672 1385.8968
+## 12 Vietnam  2007 85262356      Asia  74.249 2441.5764</code></pre>
+<pre class="r"><code>### Find the maximum gdpPercap of Egypt and Vietnam Create a new column.
+gapminder %&gt;%
+  filter(country == &quot;Egypt&quot; %in% &quot;Vietnam&quot;) %&gt;%
+  mutate(max_gdpPercap = max(gdpPercap))</code></pre>
+<pre><code>## # A tibble: 0 x 7
+## # ... with 7 variables: country &lt;chr&gt;, year &lt;int&gt;, pop &lt;dbl&gt;,
+## #   continent &lt;chr&gt;, lifeExp &lt;dbl&gt;, gdpPercap &lt;dbl&gt;, max_gdpPercap &lt;dbl&gt;</code></pre>
+<pre class="r"><code>### group_by so that we can 2 maxes
+gapminder %&gt;%
+  filter(country %in% c(&quot;Egypt&quot;, &quot;Vietnam&quot;)) %&gt;%
+  group_by(country) %&gt;%
+  summarize(max_gdpPercap = max(gdpPercap))</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   country max_gdpPercap
+##     &lt;chr&gt;         &lt;dbl&gt;
+## 1   Egypt      5581.181
+## 2 Vietnam      2441.576</code></pre>
+<pre class="r"><code>gapminder %&gt;%
+  group_by(country) %&gt;%
+  summarize(max_gdpPercap = max(gdpPercap))</code></pre>
+<pre><code>## # A tibble: 142 x 2
+##        country max_gdpPercap
+##          &lt;chr&gt;         &lt;dbl&gt;
+##  1 Afghanistan      978.0114
+##  2     Albania     5937.0295
+##  3     Algeria     6223.3675
+##  4      Angola     5522.7764
+##  5   Argentina    12779.3796
+##  6   Australia    34435.3674
+##  7     Austria    36126.4927
+##  8     Bahrain    29796.0483
+##  9  Bangladesh     1391.2538
+## 10     Belgium    33692.6051
+## # ... with 132 more rows</code></pre>
 </div>
 </div>
 
