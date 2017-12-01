@@ -313,6 +313,13 @@ head(gap_normal)
 
 # exercise 7.8 
 ```{r exercise 7.8}
+head(gap_long) # remember the columns
 
+gap_wide_new <- gap_long %>% 
+  # first unite obs_type and year into a new column called var_names. Separate by _
+  unite(col = var_names, obs_type, year, sep = "_") %>% 
+  # then spread var_names out by key-value pair.
+  spread(key = var_names, value = obs_values)
+str(gap_wide_new)
 
 ```
